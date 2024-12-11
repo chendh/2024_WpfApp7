@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,9 +24,23 @@ namespace _2024_WpfApp7
             urlTextBox.Text = aqiURL;
         }
 
-        private void btnGetAQI_Click(object sender, RoutedEventArgs e)
+        private async void btnGetAQI_Click(object sender, RoutedEventArgs e)
         {
+            string url = urlTextBox.Text;
+            ContentTextBox.Text = "抓取資料中...";
 
+            string data = await GetAQIAsync(url);
+            ContentTextBox.Text = data;
+        }
+
+        private async Task<string> GetAQIAsync(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                var response = await client.GetAsync(url);
+                var content = await response.Content.ReadAsStringAsync();
+                return content;
+            }
         }
     }
 }

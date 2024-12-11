@@ -25,5 +25,14 @@
 
             <Button x:Name="btnGetAQI" Content="取得空氣品質" HorizontalAlignment="Left"  Height="30" Width="100" Margin="20,0,0,0" Click="btnGetAQI_Click"/>
         </StackPanel>
+        <TextBox x:Name="ContentTextBox" Grid.Row="1" Grid.Column="0" Background="#FFF9F8E9"/>
+        <GridSplitter Grid.Row="1" Grid.Column="1" Height="Auto" Width="5" Background="gray" HorizontalAlignment="Center"/>
+        <Border Grid.Row="1" Grid.Column="2" Background="#FFF9F8E9" BorderBrush="Red" BorderThickness="1" Margin="1,1,1,1">
+        </Border>
+        <StatusBar Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Background="#FFD9D9D9">
+            <StatusBarItem>
+                <TextBlock x:Name="statusBarText" Text="Ready" Margin="50,0,0,0"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
