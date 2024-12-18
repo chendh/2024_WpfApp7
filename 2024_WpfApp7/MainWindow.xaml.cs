@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Text.Json;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace _2024_WpfApp7
 {
@@ -14,6 +15,8 @@ namespace _2024_WpfApp7
         AQIdata aqiData = new AQIdata();
         List<Field> fields = new List<Field>();
         List<Record> records = new List<Record>();
+
+        List<Record> selectedRecords = new List<Record>();
         public MainWindow()
         {
             InitializeComponent();
@@ -29,6 +32,42 @@ namespace _2024_WpfApp7
             ContentTextBox.Text = data;
 
             aqiData = JsonSerializer.Deserialize<AQIdata>(data);
+            fields = aqiData.fields.ToList();
+            records = aqiData.records.ToList();
+            selectedRecords = records;
+            statusBarText.Text = $"共有{records.Count}筆資料";
+
+            DisplayAQIData();
+        }
+
+        private void DisplayAQIData()
+        {
+            RecordDataGrid.ItemsSource = records;
+
+            Record record = records[0];
+            DataWrapPanel.Children.Clear();
+
+            foreach(Field field in fields)
+            {
+                var propertyInfo = record.GetType().GetProperty(field.id);
+                if (propertyInfo != null)
+                {
+                    var value = propertyInfo.GetValue(record) as string;
+                    if (double.TryParse(value, out double v))
+                    {
+                        CheckBox cb = new CheckBox
+                        {
+                            Content = field.info.label,
+                            Tag = field.id,
+                            Margin = new Thickness(3),
+                            FontSize = 14,
+                            FontWeight = FontWeights.Bold,
+                            Width = 120
+                        };
+                        DataWrapPanel.Children.Add(cb);
+                    }
+                }
+            }
         }
 
         private async Task<string> GetAQIAsync(string url)
